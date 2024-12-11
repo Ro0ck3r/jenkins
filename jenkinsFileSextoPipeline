@@ -21,7 +21,6 @@ pipeline {
                 echo "${INSTAGRAM_TAVO}"
                 echo "$INSTAGRAM_TAVO"
                 echo "=========================================="
-                sh "echo ${env.INSTAGRAM_TAVO}"
                 sh "echo ${INSTAGRAM_TAVO}"
                 sh "echo $INSTAGRAM_TAVO"
                 echo "=========================================="
