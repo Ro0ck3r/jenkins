@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/Ro0ck3r/jenkins.git'
+        BRANCH_NAME = 'main'
+    }
+
+    stage("Clonando Repositorio") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "github_credenciales", usernameVariable: "GIT_USER", passwordVariable: "GIT_PASSWORD")]) {
+                    script {
+                        sh "git clone https://$GIT_USER:$GIT_PASSWORD@github.com/Ro0ck3r/IA_UNAH.git"
+                    }
+                }
+            }
+    }
+
+        stage('Hacer Commit y Push') {
+            steps {
+                script {
+                    dir('/home/tavo/jenkins') {
+                        // Asegúrate de que Jenkins esté en el directorio correcto
+                        sh 'git add .'
+                        sh 'git commit -m "Mensaje del commit desde Jenkins" || true'  // Agregar || true para evitar error si no hay cambios
+                        sh 'git push origin ${BRANCH_NAME}'
+                    }
+                }
+            }
+        }
+    }
+}
