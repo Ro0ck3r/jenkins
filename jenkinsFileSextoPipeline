@@ -9,28 +9,5 @@ pipeline {
                 echo "Hola desde saludo 1"
             }
         }
-        stage("Saludo 2"){
-            steps{
-                echo "Hola desde saludo 2, paso 1"
-                echo "Hola desde saludo 2, paso 2"
-            }
-        }
-        stage("Imprimir variable de entorno"){
-            steps{
-                echo "${env.INSTAGRAM_TAVO}"
-                echo "${INSTAGRAM_TAVO}"
-                echo "$INSTAGRAM_TAVO"
-                echo "=========================================="
-                sh "echo ${INSTAGRAM_TAVO}"
-                sh "echo $INSTAGRAM_TAVO"
-                echo "=========================================="
-                sh "echo $INSTAGRAM"
-            }
-        }
-        stage("Imprimir var definida desde el sistema"){
-            steps{
-                sh "echo $INSTAGRAM"
-            }
-        }
     }
 }
