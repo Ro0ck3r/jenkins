@@ -2,31 +2,49 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/Ro0ck3r/jenkins.git'
-        BRANCH_NAME = 'main'
+        REPO_URL = 'https://github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio que deseas clonar
+        BRANCH_NAME = 'main'  // Nombre de la rama
     }
 
-    stage("Clonando Repositorio") {
+    stages {
+        stage('Clonando Repositorio') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "github_credenciales", usernameVariable: "GIT_USER", passwordVariable: "GIT_PASSWORD")]) {
+                withCredentials([usernamePassword(credentialsId: 'github_credenciales', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASSWORD')]) {
                     script {
-                        sh "git clone https://$GIT_USER:$GIT_PASSWORD@github.com/Ro0ck3r/IA_UNAH.git"
+                        // Clonando el repositorio con las credenciales
+                        sh "git clone https://$GIT_USER:$GIT_PASSWORD@$REPO_URL"
                     }
                 }
             }
-    }
+        }
 
         stage('Hacer Commit y Push') {
             steps {
                 script {
                     dir('/home/tavo/jenkins') {
                         // Asegúrate de que Jenkins esté en el directorio correcto
-                        sh 'git add .'
-                        sh 'git commit -m "Mensaje del commit desde Jenkins" || true'  // Agregar || true para evitar error si no hay cambios
-                        sh 'git push origin ${BRANCH_NAME}'
+                        // Verificando si hay cambios antes de hacer commit
+                        def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
+
+                        if (changes) {
+                            sh 'git add .'
+                            sh 'git commit -m "Mensaje del commit desde Jenkins"'
+                            sh 'git push origin ${BRANCH_NAME}'
+                        } else {
+                            echo "No hay cambios para hacer commit."
+                        }
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completado con éxito."
+        }
+        failure {
+            echo "Hubo un error en el pipeline."
         }
     }
 }
