@@ -24,7 +24,8 @@ pipeline {
             steps {
                 script {
                     dir('/home/tavo/jenkins') {
-                        // Asegúrate de que Jenkins esté en el directorio correcto
+                        // agregando como directorio seguro la ubicacion del repositorio.
+                        sh 'git config --global --add safe.directory /home/tavo/jenkins'
                         // Verificando si hay cambios antes de hacer commit
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
 
