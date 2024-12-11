@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio que deseas clonar
+        REPO_URL = 'github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio que deseas clonar
         BRANCH_NAME = 'main'  // Nombre de la rama
     }
 
