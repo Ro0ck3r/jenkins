@@ -11,6 +11,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'github_credenciales', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASSWORD')]) {
                     script {
+                        // limpiamdo el espacio de trabajo antes
+                        sh "rm -rf ./*"
                         // Clonando el repositorio con las credenciales
                         sh "git clone https://$GIT_USER:$GIT_PASSWORD@$REPO_URL"
                     }
