@@ -26,7 +26,7 @@ pipeline {
         stage('Desplegar a Producción') {
             steps {
                 script {
-                    sh 'cp -r ${WORKSPACE}/produccion/* ${PROD_DIR}' //Coloque directorio para pruebas, no definitivo
+                    sh 'cp -r ${WORKSPACE}/produccion/* ${PROD_DIR}' //Coloque directorio para pruebas, no definitivo, segunda pruebasdasdasdjkasdasdasd
                 }
             }
         }
