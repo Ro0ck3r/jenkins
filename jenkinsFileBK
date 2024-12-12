@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        BACKUP_DIR = "/home/tavo/BK"
+        PROD_DIR = "/home/tavo/jenkins"
+    }
+
+    stages {
+        stage('Inicio de proceso de respaldo') {
+            steps {
+                script{
+                    sh "echo Iniciando proceso de BK"
+                }
+            }
+        }
+
+        stage('Respaldo de Producción') {
+            steps {
+                script {
+                    sh 'cp -r ${PROD_DIR} ${BACKUP_DIR}/backup_$(date +%Y%m%d%H%M%S)'
+                }
+            }
+        }
+
+        stage('Desplegar a Producción') {
+            steps {
+                script {
+                    sh 'cp -r ${WORKSPACE}/produccion/* ${PROD_DIR}'
+                }
+            }
+        }
+
+        stage('Log de despliegue') {
+            steps {
+                script {
+                    sh 'echo "Despliegue exitoso a producción: $(date)" >> ${WORKSPACE}/deploy_log.txt'
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                echo "Hubo un error en el pipeline."
+                sh 'echo "Error en el despliegue: $(date)" >> ${WORKSPACE}/deploy_error_log.txt'
+            }
+        }
+    }
+}
