@@ -27,7 +27,7 @@ pipeline {
                     dir('/home/tavo/jenkins') {
                         // agregando como directorio seguro la ubicacion del repositorio.
                         sh 'git config --global --add safe.directory /home/tavo/jenkins'
-                        // Verificando si hay cambios antes de hacer commit,
+                        // Verificando si hay cambios antes de hacer commit, en changes se guadara los nombres de archivos modificados
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
 
                         if (changes) {
@@ -37,7 +37,7 @@ pipeline {
                             // Hacer push a GitHub con las credenciales
                             withCredentials([usernamePassword(credentialsId: 'tokenGit', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
                             echo "sh git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL origin ${BRANCH_NAME}"
-                            sh "git fetch ${BRANCH_NAME}"
+                            sh "git fetch origin"
                             sh "git pull origin ${BRANCH_NAME}"
                             sh "git push https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL ${BRANCH_NAME}"
                             } 
