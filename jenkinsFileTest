@@ -35,7 +35,6 @@ pipeline {
                             //sh 'git push origin ${BRANCH_NAME} '
                             // Hacer push a GitHub con las credenciales
                             withCredentials([usernamePassword(credentialsId: 'tokenGit', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
-                            sh "git remote add origin https://github.com/Ro0ck3r/jenkins.git"
                             sh "git remote -v"
                             //echo "sh git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL origin ${BRANCH_NAME}"
                             sh "git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL origin ${BRANCH_NAME}"
