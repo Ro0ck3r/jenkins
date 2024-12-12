@@ -4,6 +4,7 @@ pipeline {
     environment {
         REPO_URL = 'github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio
         BRANCH_NAME = 'main'  // Nombre de la rama
+        NAME_FILE = "jenkinsFileTest"
     }
 
     stages {
@@ -30,7 +31,7 @@ pipeline {
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
 
                         if (changes) {
-                            sh 'git add .'
+                            sh 'git add ${NAME_FILE}'
                             sh 'git commit -m "Mensaje del commit desde Jenkins"'
                             //sh 'git push origin ${BRANCH_NAME} '
                             // Hacer push a GitHub con las credenciales
