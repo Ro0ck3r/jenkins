@@ -27,7 +27,7 @@ pipeline {
                     dir('/home/tavo/jenkins') {
                         // agregando como directorio seguro la ubicacion del repositorio.
                         sh 'git config --global --add safe.directory /home/tavo/jenkins'
-                        // Verificando si hay cambios antes de hacer commit
+                        // Verificando si hay cambios antes de hacer commit, nueva prueba test test
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
 
                         if (changes) {
