@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio que deseas clonar
+        REPO_URL = 'github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio
         BRANCH_NAME = 'main'  // Nombre de la rama
     }
 
@@ -35,6 +35,7 @@ pipeline {
                             //sh 'git push origin ${BRANCH_NAME}'
                             // Hacer push a GitHub con las credenciales
                             withCredentials([usernamePassword(credentialsId: 'tokenGit', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+                            echo "sh git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL origin ${BRANCH_NAME}"
                             sh "git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL origin ${BRANCH_NAME}"
                             sh "git push https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL ${BRANCH_NAME}"
                             } 
