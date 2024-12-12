@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'github.com/Ro0ck3r/IA_UNAH.git' // Usa la URL del repositorio
+        REPO_URL = 'github.com/Ro0ck3r/jenkins.git' // Usa la URL del repositorio
         BRANCH_NAME = 'main'  // Nombre de la rama
         NAME_FILE = "jenkinsFileTest"
     }
