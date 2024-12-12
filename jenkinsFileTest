@@ -37,6 +37,7 @@ pipeline {
                             // Hacer push a GitHub con las credenciales
                             withCredentials([usernamePassword(credentialsId: 'tokenGit', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
                             echo "sh git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL origin ${BRANCH_NAME}"
+                            sh "git fetch origin"
                             sh "git pull origin ${BRANCH_NAME}"
                             sh "git push https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL ${BRANCH_NAME}"
                             } 
