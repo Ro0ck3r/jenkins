@@ -1,5 +1,5 @@
 pepiline {
-    anget any
+    agent any
     environment{
         REPO_URL = 'github.com/Ro0ck3r/jenkins.git'
         BRANCH_NAME = 'main'
@@ -13,7 +13,7 @@ pepiline {
                     script{
                         // limpiamdo el espacio de trabajo antes
                         sh "rm -rf ./*"
-                        // Clonando el repositorio con las credenciales
+                        // Clonando el repositorio con las credenciales y lo almacenamos en el espacio de trabajo del pepiline
                         sh "git clone https://$GIT_USER:$GIT_PASSWORD@$REPO_URL"
                     }
                 }
