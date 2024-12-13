@@ -34,7 +34,7 @@ pipeline {
         stage('Log de despliegue') {
             steps {
                 script {
-                    sh 'echo "Despliegue exitoso a producción: $(date)" >> ${WORKSPACE}/deploy_log.txt'
+                    sh 'echo "Despliegue exitoso a producción: $(date)" >> ${WORKSPACE}/deploy_log.txt' // comentario para verificar que se realiza correctamente la actualizacion de codigo en el repositorio
                 }
             }
         }

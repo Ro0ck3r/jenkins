@@ -52,7 +52,7 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline completado con éxito."
+            echo "Pipeline completado con éxito." // comentario para verificar que se realiza correctamente la actualizacion de codigo en el repositorio
         }
         failure {
             echo "Hubo un error en el pipeline."
