@@ -1,75 +1,75 @@
-pepiline {
+pipeline {
     agent any
-    environment{
+    environment {
         REPO_URL = 'github.com/Ro0ck3r/jenkins.git'
         BRANCH_NAME = 'main'
         BACKUP_DIR = "/home/tavo/BK"
         PROD_DIR = "/home/tavo/produccion"
     }
-    stages{
-        stage("Clonando Repositorio"){
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'github_credenciales', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASSWORD')]){
-                    script{
-                        // limpiamdo el espacio de trabajo antes
+    stages {
+        stage("Clonando Repositorio") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'github_credenciales', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASSWORD')]) {
+                    script {
+                        // Limpiando el espacio de trabajo antes
                         sh "rm -rf ./*"
-                        // Clonando el repositorio con las credenciales y lo almacenamos en el espacio de trabajo del pepiline
+                        // Clonando el repositorio con las credenciales y lo almacenamos en el espacio de trabajo del pipeline
                         sh "git clone https://$GIT_USER:$GIT_PASSWORD@$REPO_URL"
                     }
                 }
             }
         }
-        stage('Hacer Commit y Push'){
-            steps{
-                script{
-                    dir('/home/tavo/jenkins'){
-                        // agregando como directorio seguro la ubicacion del repositorio.
+        stage('Hacer Commit y Push') {
+            steps {
+                script {
+                    dir('/home/tavo/jenkins') {
+                        // Agregando como directorio seguro la ubicación del repositorio
                         sh 'git config --global --add safe.directory /home/tavo/jenkins'
                         // Verificando si hay cambios antes de hacer commit
                         def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
-                        if (changes){
+                        if (changes) {
                             sh 'git add .'
                             sh 'git commit -m "Commit realizado por jenkins"'
-                            // Hacer push a GitHub con las credenciales embebidas
-                            withCredentials([usernamePassword(credentialsId: 'tokenGit', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]){
-                            sh "git fetch origin"
-                            sh "git pull origin ${BRANCH_NAME}"
-                            sh "git push https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL ${BRANCH_NAME}"
+                            // Hacer fetch y pull antes de hacer push
+                            withCredentials([usernamePassword(credentialsId: 'tokenGit', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+                                sh "git fetch origin"
+                                sh "git pull origin ${BRANCH_NAME}"
+                                sh "git push https://${GITHUB_USER}:${GITHUB_TOKEN}@$REPO_URL ${BRANCH_NAME}"
                             }
-                        }else{
+                        } else {
                             echo "No hay cambios para hacer commit."
                         }
                     }
                 }
             }
         }
-        stage("Respaldo de Producción"){
-            steps{
-                script{
-                    sh "========================echo Iniciando proceso de BK=================================="
+        stage("Respaldo de Producción") {
+            steps {
+                script {
+                    echo "======================== Iniciando proceso de BK =================================="
                     sh 'cp -r ${PROD_DIR} ${BACKUP_DIR}/backup_$(date +%Y%m%d%H%M%S)'
-                    sh "======================== Finalizado el proceso de BK =================================="
+                    echo "======================== Finalizado el proceso de BK =================================="
                 }
             }
         }
-        stage("despliegue a produccion y creacion de logs"){
-            steps{
-                script{
+        stage("Despliegue a Producción y Creación de Logs") {
+            steps {
+                script {
                     sh "rm -rf ${PROD_DIR}/*"
-                    sh "========================Iniciando despliegue a produccion================================="
-                    sh 'cp -r ${WORKSPACE}/* $PROD_DIR'
-                    sh "========================Finalizando despliegue a produccion================================="
+                    echo "======================== Iniciando despliegue a producción =================================="
+                    sh 'cp -r ${WORKSPACE}/* ${PROD_DIR}'
+                    echo "======================== Finalizando despliegue a producción =================================="
                     sh 'echo "Despliegue exitoso a producción: $(date)" >> ${WORKSPACE}/deploy_log.txt'
                 }
             }
         }
-        post{
-            success{
-                echo "Proceso finalizado el pipeline se ejecuto por completado con éxito."
-            }
-            failure{
-                echo "Hubo un error en el pipeline."
-            }
+    }
+    post {
+        success {
+            echo "Proceso finalizado. El pipeline se ejecutó por completo con éxito."
+        }
+        failure {
+            echo "Hubo un error en el pipeline."
         }
     }
 }
