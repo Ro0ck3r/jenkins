@@ -55,6 +55,7 @@ pepiline {
         stage("despliegue a produccion y creacion de logs"){
             steps{
                 script{
+                    sh "rm -rf ${PROD_DIR}/*"
                     sh "========================Iniciando despliegue a produccion================================="
                     sh 'cp -r ${WORKSPACE}/* $PROD_DIR'
                     sh "========================Finalizando despliegue a produccion================================="
