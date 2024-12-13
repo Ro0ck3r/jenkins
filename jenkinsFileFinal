@@ -70,6 +70,7 @@ pipeline {
         }
         failure {
             echo "Hubo un error en el pipeline."
+            sh 'echo "Error en el despliegue: $(date)" >> ${WORKSPACE}/deploy_error_log.txt'
         }
     }
 }
